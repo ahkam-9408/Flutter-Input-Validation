@@ -10,6 +10,7 @@ class CustomTextField extends StatefulWidget {
   final String customReg;
   final String customReg2;
   final int maxLength;
+  final TextEditingController controller;
 
   final String errTxt;
 
@@ -22,7 +23,8 @@ class CustomTextField extends StatefulWidget {
       this.customReg2,
       @required this.keyboardType,
       this.isEnabled = true,
-      this.maxLength});
+      this.maxLength,
+      @required this.controller});
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -31,12 +33,12 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   String errorText = "";
 
-  final controller = TextEditingController();
+  // final controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: controller,
+      controller: widget.controller,
       keyboardType: widget.keyboardType,
       onChanged: onChange,
       enabled: widget.isEnabled,
@@ -56,25 +58,35 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   void onChange(value) {
     if (widget.customReg == "TryOtherPattern") {
-      if (RegVal.hasMatch(controller.text, widget.pattern)) {
+      if (RegVal.hasMatch(widget.controller.text, widget.pattern)) {
         setErrorState("");
       } else {
         setErrorState(widget.errTxt);
       }
     } else {
       if (widget.customReg2 != null) {
-        if (RegExp(widget.customReg2).hasMatch(controller.text) ||
-            RegExp(widget.customReg).hasMatch(controller.text)) {
+        if (RegExp(widget.customReg2).hasMatch(widget.controller.text) ||
+            RegExp(widget.customReg).hasMatch(widget.controller.text)) {
           setErrorState("");
         } else {
           setErrorState(widget.errTxt);
         }
       } else {
-        if (RegExp(widget.customReg).hasMatch(controller.text)) {
+        if (RegExp(widget.customReg).hasMatch(widget.controller.text)) {
           setErrorState("");
         } else {
           setErrorState(widget.errTxt);
         }
+      }
+    }
+
+    if(!widget.isEnabled){
+      print("run");
+      int ageValue = int.parse(widget.controller.text);
+      if(ageValue<=18 || ageValue >=35){
+        setErrorState(widget.errTxt);
+      }else{
+        setErrorState("");
       }
     }
   }
