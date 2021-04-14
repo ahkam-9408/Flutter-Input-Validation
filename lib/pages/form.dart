@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:input_validation_excercise/pages/components/custom_sized_box.dart';
 import 'package:input_validation_excercise/pages/components/custom_text_field.dart';
-import 'package:regexpattern/regexpattern.dart';
+import 'package:intl/intl.dart';
+import 'package:input_validation_excercise/global variable/global.dart'
+    as global;
+import 'package:input_validation_excercise/assets/constants.dart' as Constants;
 
 class FormPage extends StatefulWidget {
   FormPage({Key key}) : super(key: key);
@@ -36,24 +39,25 @@ class _FormPageState extends State<FormPage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
             padding: EdgeInsets.all(20),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
                   height: 35,
                 ),
-                Text(
-                  "Student Registration",
-                  style: TextStyle(
-                    color: Color(0xff48a572),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
+                Center(
+                  child: Text(
+                    "Student Registration",
+                    style: TextStyle(
+                      color: Color(0xff48a572),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -66,6 +70,7 @@ class _FormPageState extends State<FormPage> {
                   keyboardType: TextInputType.name,
                   customReg: r"^(?![\s.]+$)[a-zA-Z\s.]*$",
                   controller: firstNameController,
+                  uniqueName: Constants.FIRST_NAME,
                 ),
                 CustomSizedBox(),
                 CustomTextField(
@@ -75,22 +80,43 @@ class _FormPageState extends State<FormPage> {
                   keyboardType: TextInputType.name,
                   customReg: r"^(?![\s.]+$)[a-zA-Z\s.]*$",
                   controller: lastNameController,
+                  uniqueName: Constants.LAST_NAME,
                 ),
                 CustomSizedBox(),
+                Text(
+                  "Date of Birth",
+                  style: TextStyle(fontSize: 18),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    RaisedButton(
-                      onPressed: () => _selectDate(context), // Refer step 3
-                      child: Text(
-                        'Select date',
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 7 * 3,
+                      height: 45,
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        onPressed: () => _selectDate(context), // Refer step 3
+                        child: Text(
+                          'Select Date',
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                        color: Colors.blue,
                       ),
-                      color: Colors.greenAccent,
                     ),
-                    Text(selectedDate.toString())
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(DateFormat('yyyy-MM-dd')
+                        .format(selectedDate)
+                        .toString())
                   ],
+                ),
+                SizedBox(
+                  height: 10,
                 ),
                 difference >= 18 && difference <= 35
                     ? Text("")
@@ -104,9 +130,9 @@ class _FormPageState extends State<FormPage> {
                   labelText: "Age",
                   errTxt: errorAge,
                   keyboardType: TextInputType.name,
-                  pattern: RegexPattern.alphabetOnly,
                   isEnabled: false,
                   controller: ageController,
+                  isGrey: true,
                 ),
                 CustomSizedBox(),
                 CustomTextField(
@@ -118,6 +144,7 @@ class _FormPageState extends State<FormPage> {
                   customReg2: r"^[0-9]{12}$",
                   maxLength: 12,
                   controller: nicController,
+                  uniqueName: Constants.NIC,
                 ),
                 CustomSizedBox(),
                 CustomTextField(
@@ -126,11 +153,15 @@ class _FormPageState extends State<FormPage> {
                   errTxt: errorMobileNumber,
                   keyboardType: TextInputType.phone,
                   maxLength: 10,
-                  pattern: RegexPattern.numericOnly,
-                  customReg: "TryOtherPattern",
+                  customReg: r"^[0-9]{10}$",
                   controller: mobileNumberController,
+                  uniqueName: Constants.MOBILE_NUMBER,
                 ),
                 CustomSizedBox(),
+                Text(
+                  "Gender",
+                  style: TextStyle(fontSize: 18),
+                ),
                 ListTile(
                   title: const Text('Male'),
                   leading: Radio<Gender>(
@@ -163,6 +194,7 @@ class _FormPageState extends State<FormPage> {
                   keyboardType: TextInputType.streetAddress,
                   customReg: r"^[a-zA-Z0-9\s,.'-]{3,}$",
                   controller: addressController,
+                  uniqueName: Constants.ADDRESS,
                 ),
                 CustomSizedBox(),
                 CustomTextField(
@@ -172,7 +204,33 @@ class _FormPageState extends State<FormPage> {
                   keyboardType: TextInputType.text,
                   customReg: r"^[a-zA-Z0-9\s,.'-]{3,}$",
                   controller: schoolController,
+                  uniqueName: Constants.SCHOOL,
                 ),
+                CustomSizedBox(),
+                Container(
+                    width: double.infinity,
+                    height: 55,
+                    child: FlatButton(
+                        onPressed: () {
+                          print(ageController.text == "");
+                          // final age = int.parse(ageController.text.toString());
+
+                          // print(global.isValidFirstName &&
+                          //     global.isValidLastName &&
+                          //     global.isValidNIC &&
+                          //     global.isValidMobileNumber &&
+                          //     global.isValidAddress &&
+                          //     global.isValidSchool &&
+                          //     (age>= 18 && age<=35));
+                        },
+                        color: Colors.blue,
+                        textColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Text(
+                          "Submit",
+                          style: TextStyle(fontSize: 22),
+                        )))
               ],
             )),
       ),
@@ -186,14 +244,15 @@ class _FormPageState extends State<FormPage> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
     );
-    if (picked != null && picked != selectedDate)
+    if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
       });
-    setState(() {
-      difference =
-          ((DateTime.now().difference(selectedDate).inDays) / 365).floor();
-      ageController.text = difference.toString();
-    });
+      setState(() {
+        difference =
+            ((DateTime.now().difference(selectedDate).inDays) / 365).floor();
+        ageController.text = difference.toString();
+      });
+    }
   }
 }

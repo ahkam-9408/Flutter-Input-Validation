@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:regexpattern/regexpattern.dart';
+import 'package:input_validation_excercise/global variable/global.dart' as global;
+import 'package:input_validation_excercise/assets/constants.dart' as Constants;
 
 class CustomTextField extends StatefulWidget {
   final String labelText;
   final String hintText;
   final TextInputType keyboardType;
-  final Pattern pattern;
   final bool isEnabled;
   final String customReg;
   final String customReg2;
   final int maxLength;
   final TextEditingController controller;
+  final bool isGrey;
+  final String uniqueName;
 
   final String errTxt;
 
@@ -18,12 +20,13 @@ class CustomTextField extends StatefulWidget {
       {@required this.labelText,
       @required this.hintText,
       this.errTxt,
-      this.pattern,
       this.customReg,
       this.customReg2,
       @required this.keyboardType,
       this.isEnabled = true,
       this.maxLength,
+      this.isGrey = false,
+      this.uniqueName,
       @required this.controller});
 
   @override
@@ -43,6 +46,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
       onChanged: onChange,
       enabled: widget.isEnabled,
       maxLength: widget.maxLength,
+      style:
+          TextStyle(color: widget.isGrey == true ? Colors.grey : Colors.black),
       decoration: InputDecoration(
         errorText: errorText == "" ? null : errorText,
         border: OutlineInputBorder(
@@ -57,36 +62,22 @@ class _CustomTextFieldState extends State<CustomTextField> {
   }
 
   void onChange(value) {
-    if (widget.customReg == "TryOtherPattern") {
-      if (RegVal.hasMatch(widget.controller.text, widget.pattern)) {
+    if (widget.customReg2 != null) {
+      if (RegExp(widget.customReg2).hasMatch(widget.controller.text) ||
+          RegExp(widget.customReg).hasMatch(widget.controller.text)) {
         setErrorState("");
+        setFormValidState(true);
       } else {
         setErrorState(widget.errTxt);
+        setFormValidState(false);
       }
     } else {
-      if (widget.customReg2 != null) {
-        if (RegExp(widget.customReg2).hasMatch(widget.controller.text) ||
-            RegExp(widget.customReg).hasMatch(widget.controller.text)) {
-          setErrorState("");
-        } else {
-          setErrorState(widget.errTxt);
-        }
-      } else {
-        if (RegExp(widget.customReg).hasMatch(widget.controller.text)) {
-          setErrorState("");
-        } else {
-          setErrorState(widget.errTxt);
-        }
-      }
-    }
-
-    if(!widget.isEnabled){
-      print("run");
-      int ageValue = int.parse(widget.controller.text);
-      if(ageValue<=18 || ageValue >=35){
-        setErrorState(widget.errTxt);
-      }else{
+      if (RegExp(widget.customReg).hasMatch(widget.controller.text)) {
         setErrorState("");
+        setFormValidState(true);
+      } else {
+        setErrorState(widget.errTxt);
+        setFormValidState(false);
       }
     }
   }
@@ -95,5 +86,27 @@ class _CustomTextFieldState extends State<CustomTextField> {
     setState(() {
       errorText = eText;
     });
+  }
+
+  void setFormValidState(bool state){
+    if(widget.uniqueName == Constants.FIRST_NAME){
+      global.isValidFirstName = state;
+      print(global.isValidFirstName);
+    }else if(widget.uniqueName == Constants.LAST_NAME){
+      global.isValidLastName = state;
+      print(global.isValidLastName);
+    }else if(widget.uniqueName == Constants.NIC){
+      global.isValidNIC = state;
+      print(global.isValidNIC);
+    }else if(widget.uniqueName == Constants.MOBILE_NUMBER){
+      global.isValidMobileNumber = state;
+      print(global.isValidMobileNumber);
+    }else if(widget.uniqueName == Constants.ADDRESS){
+      global.isValidAddress = state;
+      print(global.isValidAddress);
+    }else if(widget.uniqueName == Constants.SCHOOL){
+      global.isValidSchool = state;
+      print(global.isValidSchool);
+    }
   }
 }

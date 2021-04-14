@@ -30,6 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   regexpattern: ^1.0.0
   syncfusion_flutter_datepicker: 18.4.49-beta
+  intl: 0.16.1
 
 dev_dependencies:
   flutter_test:
