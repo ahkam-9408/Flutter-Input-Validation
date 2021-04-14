@@ -37,9 +37,15 @@ class _SlapScreenState extends State<SlapScreen> {
               Text(
                 "ProAcademy Online",
                 style: TextStyle(
-                    color: Color(0xff48a572),
+                    color: Colors.blue,
                     fontSize: screenHeight / 20,
-                    fontWeight: FontWeight.bold),
+                    fontWeight: FontWeight.bold,
+                    shadows: [
+                      Shadow(
+                          color: Colors.black.withOpacity(0.5),
+                          offset: Offset(4, 4),
+                          blurRadius: 20)
+                    ]),
               ),
               SizedBox(
                 height: 40,

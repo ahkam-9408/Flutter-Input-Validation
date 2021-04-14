@@ -31,6 +31,7 @@ dependencies:
   regexpattern: ^1.0.0
   syncfusion_flutter_datepicker: 18.4.49-beta
   intl: 0.16.1
+  awesome_dialog: 1.3.1
 
 dev_dependencies:
   flutter_test:

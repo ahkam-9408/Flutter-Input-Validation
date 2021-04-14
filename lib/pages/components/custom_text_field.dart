@@ -1,33 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:input_validation_excercise/global variable/global.dart' as global;
+import 'package:input_validation_excercise/global variable/global.dart'
+    as global;
 import 'package:input_validation_excercise/assets/constants.dart' as Constants;
 
 class CustomTextField extends StatefulWidget {
   final String labelText;
   final String hintText;
   final TextInputType keyboardType;
-  final bool isEnabled;
+  final TextEditingController controller;
+
+  final String uniqueName;
   final String customReg;
   final String customReg2;
-  final int maxLength;
-  final TextEditingController controller;
-  final bool isGrey;
-  final String uniqueName;
-
   final String errTxt;
 
-  CustomTextField(
-      {@required this.labelText,
-      @required this.hintText,
-      this.errTxt,
-      this.customReg,
-      this.customReg2,
-      @required this.keyboardType,
-      this.isEnabled = true,
-      this.maxLength,
-      this.isGrey = false,
-      this.uniqueName,
-      @required this.controller});
+  final bool isEnabled;
+  final bool isGrey;
+  final int maxLength;
+
+  CustomTextField({
+    @required this.labelText,
+    @required this.hintText,
+    @required this.keyboardType,
+    @required this.controller,
+    this.uniqueName,
+    this.customReg,
+    this.customReg2,
+    this.errTxt,
+    this.isEnabled = true,
+    this.isGrey = false,
+    this.maxLength,
+  });
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -35,8 +38,6 @@ class CustomTextField extends StatefulWidget {
 
 class _CustomTextFieldState extends State<CustomTextField> {
   String errorText = "";
-
-  // final controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +50,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
       style:
           TextStyle(color: widget.isGrey == true ? Colors.grey : Colors.black),
       decoration: InputDecoration(
+        labelText: widget.labelText,
+        hintText: widget.hintText,
         errorText: errorText == "" ? null : errorText,
         border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12))),
         errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide(color: Colors.red)),
-        labelText: widget.labelText,
-        hintText: widget.hintText,
       ),
     );
   }
@@ -88,25 +89,19 @@ class _CustomTextFieldState extends State<CustomTextField> {
     });
   }
 
-  void setFormValidState(bool state){
-    if(widget.uniqueName == Constants.FIRST_NAME){
+  void setFormValidState(bool state) {
+    if (widget.uniqueName == Constants.FIRST_NAME) {
       global.isValidFirstName = state;
-      print(global.isValidFirstName);
-    }else if(widget.uniqueName == Constants.LAST_NAME){
+    } else if (widget.uniqueName == Constants.LAST_NAME) {
       global.isValidLastName = state;
-      print(global.isValidLastName);
-    }else if(widget.uniqueName == Constants.NIC){
+    } else if (widget.uniqueName == Constants.NIC) {
       global.isValidNIC = state;
-      print(global.isValidNIC);
-    }else if(widget.uniqueName == Constants.MOBILE_NUMBER){
+    } else if (widget.uniqueName == Constants.MOBILE_NUMBER) {
       global.isValidMobileNumber = state;
-      print(global.isValidMobileNumber);
-    }else if(widget.uniqueName == Constants.ADDRESS){
+    } else if (widget.uniqueName == Constants.ADDRESS) {
       global.isValidAddress = state;
-      print(global.isValidAddress);
-    }else if(widget.uniqueName == Constants.SCHOOL){
+    } else if (widget.uniqueName == Constants.SCHOOL) {
       global.isValidSchool = state;
-      print(global.isValidSchool);
     }
   }
 }
